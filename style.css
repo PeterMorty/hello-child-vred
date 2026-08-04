@@ -1,0 +1,171 @@
+/*
+Theme Name: Nombre
+Theme URI: https://elementor.com
+Description: Child theme for Hello Elementor.
+Author: VRED
+Author URI: https://elementor.com
+Template: hello-elementor
+Version: 1.0.0
+Text Domain: nombre
+License: GNU General Public License v3 or later
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
+*/
+
+/** Theme */
+p {
+	margin-top: 0
+}
+
+b, strong {
+	font-weight: 600 !important
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin-block-end: 0;
+	margin-block-start: 0
+}
+
+.alignwide {
+	max-width: 100%;
+	margin-inline: auto
+}
+.alignfull {
+	width: 100vw;
+	max-width: 100vw;
+	margin-inline: calc(50% - 50vw)
+}
+
+.screen-reader-text {
+	clip: rect(1px, 1px, 1px, 1px);
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	word-wrap: normal !important
+}
+
+/** Widget: Product categories */
+.woocommerce-shop .elementor-widget-wp-widget-woocommerce_product_categories,
+.search-results .elementor-widget-wp-widget-woocommerce_product_categories,
+.tax-product_brand .elementor-widget-wp-widget-woocommerce_product_categories
+ul.product-categories h5 {
+	display: none
+}
+ul.product-categories {
+	display: inline-flex;
+	flex-wrap: wrap;
+	margin: -5px 0 -15px;
+	padding: 5px 0 0;
+	width: 100%
+}
+ul.product-categories li {
+	list-style-type: none;
+	margin: 0 8px 8px 0;
+	padding: 0;
+	white-space: nowrap
+}
+ul.product-categories li a {
+	display: block;
+	padding: 7px 14px;
+	border: 1px solid var( --e-global-color-secondary );
+	font-size: .9em;
+	font-weight: 600;
+	color: var( --e-global-color-text )
+}
+@media only screen and (max-width: 1024px) {
+	ul.product-categories {
+		flex-wrap: nowrap;
+		overflow-x: scroll
+	}
+	ul.product-categories li a {
+		padding: 12px 20px;
+		font-size: 1em
+	}
+}
+@media only screen and (max-width: 1024px) {
+	ul.product-categories li a {
+		padding: 6px 16px
+	}
+}
+
+/** ADDON: Underline effect */
+.underline-effect,
+.underline-effect--white {
+	--underline-effect-color: var( --e-global-color-accent )
+}
+.underline-effect--white {
+	--underline-effect-color: #fff
+}
+.underline-effect .elementor-icon-list-text,
+.underline-effect .elementor-button-text,
+.underline-effect .vred-btn__text,
+.underline-effect .vred-elements-product-meta__link,
+.underline-effect .vred-elements-post-meta__link .vred-elements-post-meta__text,
+.underline-effect--white .elementor-icon-list-text,
+.underline-effect--white .elementor-button-text,
+.underline-effect--white .vred-btn__text,
+.underline-effect--white .vred-elements-product-meta__link,
+.underline-effect--white .vred-elements-post-meta__link .vred-elements-post-meta__text,
+.elementor-widget-text-editor a {
+	position: relative
+}
+.underline-effect .elementor-icon-list-text:after,
+.underline-effect .elementor-button-text:after,
+.underline-effect .vred-btn__text:after,
+.underline-effect .vred-elements-product-meta__link:after,
+.underline-effect .vred-elements-post-meta__link .vred-elements-post-meta__text:after,
+.underline-effect--white .elementor-icon-list-text:after,
+.underline-effect--white .elementor-button-text:after,
+.underline-effect--white .vred-btn__text:after,
+.underline-effect--white .vred-elements-product-meta__link:after,
+.underline-effect--white .vred-elements-post-meta__link .vred-elements-post-meta__text:after,
+.elementor-widget-text-editor a:after {
+	content: '';
+	position: absolute;
+	bottom: -2px;
+	left: 0;
+	z-index: 1;
+	width: 100%;
+	height: 1px;
+	background-color: var( --underline-effect-color, var( --e-global-color-accent ) );
+	transform: scaleX(0);
+	transform-origin: bottom right;
+	transition: transform .2s ease-in-out !important
+}
+.underline-effect .elementor-icon-list-text:hover:after,
+.underline-effect .elementor-button-text:hover:after,
+.underline-effect .vred-btn__text:hover:after,
+.underline-effect .vred-elements-product-meta__link:hover:after,
+.underline-effect .vred-elements-post-meta__link:hover .vred-elements-post-meta__text:after,
+.underline-effect--white .elementor-icon-list-text:hover:after,
+.underline-effect--white .elementor-button-text:hover:after,
+.underline-effect--white .vred-btn__text:hover:after,
+.underline-effect--white .vred-elements-product-meta__link:hover:after,
+.underline-effect--white .vred-elements-post-meta__link:hover .vred-elements-post-meta__text:after,
+.elementor-widget-text-editor a:hover:after {
+	transform: scaleX(1);
+	transform-origin: bottom left
+}
+
+/** ADDON: Container to */
+:root {
+	--ct-content-padding: 60px;
+	--ct-content-width: 1920px;
+	--ct-content-offset: max(0px, calc((100vw - var( --ct-content-width )) / 2))
+}
+@media (min-width: 2040px) {
+	.container-to-left > div:last-child {
+		padding-right: var( --ct-content-offset )
+	}
+	.container-to-right > div:first-child {
+		padding-left: var( --ct-content-offset )
+	}
+}
+@media (min-width: 1025px) and (max-width: 2039px) {
+	.container-to-left > div:last-child {
+		padding-right: var( --ct-content-padding )
+	}
+	.container-to-right > div:first-child {
+		padding-left: var( --ct-content-padding )
+	}
+}
