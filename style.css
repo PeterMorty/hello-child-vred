@@ -149,11 +149,11 @@ ul.product-categories li a {
 
 /** ADDON: Container to */
 :root {
-	--ct-content-padding: 60px;
-	--ct-content-width: 1920px;
+	--ct-content-padding: 40px;
+	--ct-content-width: 1400px;
 	--ct-content-offset: max(0px, calc((100vw - var( --ct-content-width )) / 2))
 }
-@media (min-width: 2040px) {
+@media (min-width: 1480px) {
 	.container-to-left > div:last-child {
 		padding-right: var( --ct-content-offset )
 	}
@@ -161,7 +161,7 @@ ul.product-categories li a {
 		padding-left: var( --ct-content-offset )
 	}
 }
-@media (min-width: 1025px) and (max-width: 2039px) {
+@media (min-width: 1025px) and (max-width: 1479px) {
 	.container-to-left > div:last-child {
 		padding-right: var( --ct-content-padding )
 	}
