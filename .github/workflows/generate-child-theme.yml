@@ -11,7 +11,7 @@ on:
       woocommerce:
         description: Include WooCommerce styles
         required: true
-        default: true
+        default: false
         type: boolean
       custom_fonts:
         description: Custom fonts (comma separated)
@@ -41,15 +41,10 @@ jobs:
             --fonts "$CUSTOM_FONTS")"
           echo "slug=$slug" >> "$GITHUB_OUTPUT"
 
-      - name: Create installable ZIP
-        run: |
-          cd build
-          zip -r "../${{ steps.generate.outputs.slug }}.zip" "${{ steps.generate.outputs.slug }}"
-
-      - name: Upload theme ZIP
+      - name: Upload theme
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.generate.outputs.slug }}
-          path: ${{ steps.generate.outputs.slug }}.zip
+          path: build
           if-no-files-found: error
           retention-days: 7
