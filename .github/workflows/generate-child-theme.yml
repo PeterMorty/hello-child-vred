@@ -1,0 +1,42 @@
+name: Generate child theme
+
+on:
+  workflow_dispatch:
+    inputs:
+      theme_name:
+        description: Theme name
+        required: true
+        type: string
+      woocommerce:
+        description: Include WooCommerce styles
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    name: Generate child theme
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate theme
+        id: generate
+        run: |
+          slug="$(python3 .github/scripts/generate-child-theme.py \
+            --name "${{ inputs.theme_name }}" \
+            --woocommerce "${{ inputs.woocommerce }}")"
+          echo "slug=$slug" >> "$GITHUB_OUTPUT"
+
+      - name: Upload theme
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.generate.outputs.slug }}
+          path: build/
+          if-no-files-found: error
+          retention-days: 7
