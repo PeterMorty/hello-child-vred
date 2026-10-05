@@ -44,50 +44,6 @@ h1, h2, h3, h4, h5, h6 {
 	word-wrap: normal !important
 }
 
-/** Widget: Product categories */
-.woocommerce-shop .elementor-widget-wp-widget-woocommerce_product_categories,
-.search-results .elementor-widget-wp-widget-woocommerce_product_categories,
-.tax-product_brand .elementor-widget-wp-widget-woocommerce_product_categories
-ul.product-categories h5 {
-	display: none
-}
-ul.product-categories {
-	display: inline-flex;
-	flex-wrap: wrap;
-	margin: -5px 0 -15px;
-	padding: 5px 0 0;
-	width: 100%
-}
-ul.product-categories li {
-	list-style-type: none;
-	margin: 0 8px 8px 0;
-	padding: 0;
-	white-space: nowrap
-}
-ul.product-categories li a {
-	display: block;
-	padding: 7px 14px;
-	border: 1px solid var( --e-global-color-secondary );
-	font-size: .9em;
-	font-weight: 600;
-	color: var( --e-global-color-text )
-}
-@media only screen and (max-width: 1024px) {
-	ul.product-categories {
-		flex-wrap: nowrap;
-		overflow-x: scroll
-	}
-	ul.product-categories li a {
-		padding: 12px 20px;
-		font-size: 1em
-	}
-}
-@media only screen and (max-width: 1024px) {
-	ul.product-categories li a {
-		padding: 6px 16px
-	}
-}
-
 /** ADDON: Underline effect */
 .underline-effect,
 .underline-effect--white {
