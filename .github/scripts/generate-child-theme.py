@@ -41,7 +41,48 @@ def replace_once(content, old, new, label):
 	return content.replace(old, new, 1)
 
 
-def generate_theme(theme_name, include_woocommerce):
+def parse_fonts(value):
+	return [font.strip() for font in value.splitlines() if font.strip()]
+
+
+def configure_fonts(theme_dir, functions, fonts, slug, php_prefix, package):
+	fonts_path = theme_dir / "includes" / "elementor-fonts.php"
+	require_line = "require_once get_stylesheet_directory() . '/includes/elementor-fonts.php';"
+
+	if not fonts:
+		if require_line not in functions:
+			raise RuntimeError("Elementor fonts include was not found.")
+
+		functions = functions.replace(f"\n{require_line}", "", 1)
+
+		if not fonts_path.exists():
+			raise RuntimeError("Elementor fonts file was not found.")
+
+		fonts_path.unlink()
+		return functions
+
+	content = fonts_path.read_text(encoding="utf-8")
+	content = replace_once(content, "@package Child_Theme", f"@package {package}", "fonts package")
+	content = content.replace("child_theme_add_elementor_font_group", f"{php_prefix}_add_elementor_font_group")
+	content = content.replace("child_theme_add_elementor_fonts", f"{php_prefix}_add_elementor_fonts")
+	content = content.replace("'child-theme'", f"'{slug}'")
+
+	font_lines = "\n".join(
+		f"\t$fonts[{font!r}] = 'custom_fonts';"
+		for font in fonts
+	)
+	content = re.sub(
+		r"\t\$fonts\['Bebas Neue'\] = 'custom_fonts';\n\t\$fonts\['Mona Sans'\] = 'custom_fonts';",
+		font_lines,
+		content,
+		count=1,
+	)
+
+	fonts_path.write_text(content, encoding="utf-8")
+	return functions
+
+
+def generate_theme(theme_name, include_woocommerce, fonts):
 	theme_name = theme_name.strip()
 
 	if not theme_name:
@@ -96,6 +137,7 @@ def generate_theme(theme_name, include_woocommerce):
 
 		woocommerce_css.unlink()
 
+	functions = configure_fonts(theme_dir, functions, fonts, slug, php_prefix, package)
 	functions_path.write_text(functions, encoding="utf-8")
 
 	return slug
@@ -105,9 +147,14 @@ def main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--name", required=True)
 	parser.add_argument("--woocommerce", choices=("true", "false"), required=True)
+	parser.add_argument("--fonts", default="")
 	args = parser.parse_args()
 
-	slug = generate_theme(args.name, args.woocommerce == "true")
+	slug = generate_theme(
+		args.name,
+		args.woocommerce == "true",
+		parse_fonts(args.fonts),
+	)
 	print(slug)
 
 
