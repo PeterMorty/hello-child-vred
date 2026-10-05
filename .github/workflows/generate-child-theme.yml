@@ -33,10 +33,15 @@ jobs:
             --woocommerce "${{ inputs.woocommerce }}")"
           echo "slug=$slug" >> "$GITHUB_OUTPUT"
 
-      - name: Upload theme
+      - name: Create installable ZIP
+        run: |
+          cd build
+          zip -r "../${{ steps.generate.outputs.slug }}.zip" "${{ steps.generate.outputs.slug }}"
+
+      - name: Upload theme ZIP
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.generate.outputs.slug }}
-          path: build/
+          path: ${{ steps.generate.outputs.slug }}.zip
           if-no-files-found: error
           retention-days: 7
