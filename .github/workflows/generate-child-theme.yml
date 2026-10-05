@@ -12,6 +12,10 @@ on:
         required: true
         default: true
         type: boolean
+      custom_fonts:
+        description: Custom fonts (one per line)
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -27,10 +31,13 @@ jobs:
 
       - name: Generate theme
         id: generate
+        env:
+          CUSTOM_FONTS: ${{ inputs.custom_fonts }}
         run: |
           slug="$(python3 .github/scripts/generate-child-theme.py \
             --name "${{ inputs.theme_name }}" \
-            --woocommerce "${{ inputs.woocommerce }}")"
+            --woocommerce "${{ inputs.woocommerce }}" \
+            --fonts "$CUSTOM_FONTS")"
           echo "slug=$slug" >> "$GITHUB_OUTPUT"
 
       - name: Create installable ZIP
