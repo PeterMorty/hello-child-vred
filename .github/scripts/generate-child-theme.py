@@ -42,7 +42,7 @@ def replace_once(content, old, new, label):
 
 
 def parse_fonts(value):
-	return [font.strip() for font in value.splitlines() if font.strip()]
+	return [font.strip() for font in value.split(",") if font.strip()]
 
 
 def configure_fonts(theme_dir, functions, fonts, slug, php_prefix, package):
