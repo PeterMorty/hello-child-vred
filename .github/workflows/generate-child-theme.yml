@@ -1,0 +1,54 @@
+name: Generate child theme
+
+on:
+  workflow_dispatch:
+    inputs:
+      theme_name:
+        description: Theme name
+        required: true
+        type: string
+      woocommerce:
+        description: Include WooCommerce styles
+        required: true
+        default: true
+        type: boolean
+      custom_fonts:
+        description: Custom fonts (one per line)
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    name: Generate child theme
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate theme
+        id: generate
+        env:
+          CUSTOM_FONTS: ${{ inputs.custom_fonts }}
+        run: |
+          slug="$(python3 .github/scripts/generate-child-theme.py \
+            --name "${{ inputs.theme_name }}" \
+            --woocommerce "${{ inputs.woocommerce }}" \
+            --fonts "$CUSTOM_FONTS")"
+          echo "slug=$slug" >> "$GITHUB_OUTPUT"
+
+      - name: Create installable ZIP
+        run: |
+          cd build
+          zip -r "../${{ steps.generate.outputs.slug }}.zip" "${{ steps.generate.outputs.slug }}"
+
+      - name: Upload theme ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.generate.outputs.slug }}
+          path: ${{ steps.generate.outputs.slug }}.zip
+          if-no-files-found: error
+          retention-days: 7
