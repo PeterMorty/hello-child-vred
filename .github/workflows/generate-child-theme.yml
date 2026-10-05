@@ -1,4 +1,5 @@
 name: Generate child theme
+run-name: ${{ inputs.theme_name }}
 
 on:
   workflow_dispatch:
