@@ -82,6 +82,45 @@ def configure_fonts(theme_dir, functions, fonts, slug, php_prefix, package):
 	return functions
 
 
+def configure_woocommerce(theme_dir, functions, include_woocommerce, package):
+	woocommerce_path = theme_dir / "includes" / "woocommerce.php"
+	woocommerce_css = theme_dir / "assets" / "css" / "woocommerce.css"
+	require_line = "require_once get_stylesheet_directory() . '/includes/woocommerce.php';"
+
+	if include_woocommerce:
+		content = woocommerce_path.read_text(encoding="utf-8")
+		content = replace_once(content, "@package Nombre", f"@package {package}", "WooCommerce package")
+		woocommerce_path.write_text(content, encoding="utf-8")
+		return functions
+
+	if require_line not in functions:
+		raise RuntimeError("WooCommerce include was not found.")
+
+	functions = functions.replace(f"\n{require_line}", "", 1)
+
+	pattern = re.compile(
+		r"\n\twp_enqueue_style\(\n"
+		+ r"\t\t'[^']+-woocommerce',"
+		+ r".*?\n\t\);",
+		re.DOTALL,
+	)
+	functions, replacements = pattern.subn("", functions, count=1)
+
+	if replacements != 1:
+		raise RuntimeError("WooCommerce enqueue block was not found.")
+
+	if not woocommerce_css.exists():
+		raise RuntimeError("WooCommerce stylesheet was not found.")
+
+	if not woocommerce_path.exists():
+		raise RuntimeError("WooCommerce include file was not found.")
+
+	woocommerce_css.unlink()
+	woocommerce_path.unlink()
+
+	return functions
+
+
 def generate_theme(theme_name, include_woocommerce, fonts):
 	theme_name = theme_name.strip()
 
@@ -118,25 +157,7 @@ def generate_theme(theme_name, include_woocommerce, fonts):
 	functions = functions.replace("'nombre-woocommerce'", f"'{slug}-woocommerce'")
 	functions = functions.replace("'nombre'", f"'{slug}'")
 
-	if not include_woocommerce:
-		pattern = re.compile(
-			r"\n\twp_enqueue_style\(\n"
-			+ rf"\t\t'{re.escape(slug)}-woocommerce',"
-			+ r".*?\n\t\);",
-			re.DOTALL,
-		)
-		functions, replacements = pattern.subn("", functions, count=1)
-
-		if replacements != 1:
-			raise RuntimeError("WooCommerce enqueue block was not found.")
-
-		woocommerce_css = theme_dir / "assets" / "css" / "woocommerce.css"
-
-		if not woocommerce_css.exists():
-			raise RuntimeError("WooCommerce stylesheet was not found.")
-
-		woocommerce_css.unlink()
-
+	functions = configure_woocommerce(theme_dir, functions, include_woocommerce, package)
 	functions = configure_fonts(theme_dir, functions, fonts, slug, php_prefix, package)
 	functions_path.write_text(functions, encoding="utf-8")
 
