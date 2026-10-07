@@ -9,7 +9,7 @@ on:
         required: true
         type: string
       woocommerce:
-        description: Include WooCommerce styles
+        description: Include WooCommerce support
         required: true
         default: false
         type: boolean
