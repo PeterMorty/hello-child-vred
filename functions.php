@@ -33,3 +33,6 @@ add_action( 'wp_enqueue_scripts', 'nombre_enqueue_styles', 20 );
 /** Load child theme includes */
 require_once get_stylesheet_directory() . '/includes/elementor-editor-cleanup.php';
 require_once get_stylesheet_directory() . '/includes/elementor-fonts.php';
+
+/** WooCommerce: Shipping prices already include tax */
+add_filter( 'woocommerce_shipping_prices_include_tax', '__return_true' );
